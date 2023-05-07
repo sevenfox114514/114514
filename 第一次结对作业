@@ -1,0 +1,127 @@
+  private void 添加Dor_Click(object sender, EventArgs e)//宿舍信息界面添加宿舍
+        {
+            string did=didtxt.Text.Trim();
+            string bid=bidtxt.Text.Trim();
+            string dnum = dnumtxt.Text.Trim();
+            string floor=floortxt.Text.Trim();
+            string bed=bedtxt.Text.Trim();
+            string price=pricetxt.Text.Trim();
+            if (didtxt.Text.Trim().Equals("") || bidtxt.Text.Trim().Equals("") || dnumtxt.Text.Trim().Equals("") || floortxt.Text.Trim().Equals("") || bedtxt.Text.Trim().Equals("") || pricetxt.Text.Trim().Equals(""))
+            {
+                if (didtxt.Text.Trim().Equals("")) MessageBox.Show("请输入宿舍id！", "提示");
+                else if (bidtxt.Text.Trim().Equals("")) MessageBox.Show("请选择楼号！", "提示");
+                else if (dnumtxt.Text.Trim().Equals("")) MessageBox.Show("请输入宿舍号！", "提示");
+                else if (floortxt.Text.Trim().Equals("")) MessageBox.Show("请输入楼层！", "提示");
+                else if (bedtxt.Text.Trim().Equals("")) MessageBox.Show("请输入床位数！", "提示");
+                else if (pricetxt.Text.Trim().Equals("")) MessageBox.Show("请输入单价！", "提示");
+            }
+            else if (!IsNotExist_did(didtxt.Text.Trim()) || !IsNotchongfu_d_b(didtxt.Text.Trim(), dnumtxt.Text.Trim(), bidtxt.Text.Trim()))
+            {
+                MessageBox.Show("该记录已存在！", "提示");
+                return;
+            }
+            else
+            {
+                string sqlStr1;
+                try
+                {
+                    sqlStr1 = "insert into Dormitory values('" + didtxt.Text.Trim() + "','"
+                         + bidtxt.Text.Trim() + "','" + dnumtxt.Text.Trim() + "','" + floortxt.Text.Trim() + "','" + bedtxt.Text.Trim() + "','" + pricetxt.Text.Trim() + "')";
+                    database.更新(sqlStr1);
+                    宿舍获取();
+                    MessageBox.Show("添加成功！", "提示");
+                }
+                catch
+                {
+                    MessageBox.Show("操作失败！请检查规范", "提示");
+                }
+
+            }
+
+        }
+        
+        private void 修改Dor_Click(object sender, EventArgs e)//宿舍信息界面修改宿舍信息
+        {
+            if (bidtxt.Text.Trim().Equals("") || didtxt.Text.Trim().Equals("") || dnumtxt.Text.Trim().Equals("") || floortxt.Text.Trim().Equals("") || bedtxt.Text.Trim().Equals("") || pricetxt.Text.Trim().Equals(""))
+            {
+                if (didtxt.Text.Trim().Equals("")) MessageBox.Show("请输入宿舍id！", "提示");
+                else if (bidtxt.Text.Trim().Equals("")) MessageBox.Show("请选择楼号！", "提示");
+                else if (dnumtxt.Text.Trim().Equals("")) MessageBox.Show("请输入宿舍号！", "提示");
+                else if (floortxt.Text.Trim().Equals("")) MessageBox.Show("请输入楼层！", "提示");
+                else if (bedtxt.Text.Trim().Equals("")) MessageBox.Show("请输入床位数！", "提示");
+                else if (pricetxt.Text.Trim().Equals("")) MessageBox.Show("请输入单价！", "提示");
+            }
+            else if (IsNotExist_did(didtxt.Text.ToString().Trim())==true)
+            {
+                MessageBox.Show("该记录不存在！", "提示");
+                return;
+            }
+            else if (!IsNotchongfu_d_b(didtxt.Text.Trim(), dnumtxt.Text.Trim(), bidtxt.Text.Trim()))
+            {
+                MessageBox.Show("该宿舍记录已存在！", "提示");
+                return;
+            }
+            else
+            {
+                string sqlStr1;
+                try
+                {
+                    sqlStr1 = "update  Dormitory set did='" + didtxt.Text.Trim() + "',bid='"
+                        +bidtxt.Text.Trim() + "',dnum='" + dnumtxt.Text.Trim() + "',dfloor='"
+                        + floortxt.Text.Trim() + "',bed='" + bedtxt.Text.Trim() + "',price='"
+                        + pricetxt.Text.Trim()+ "' where did='" + didtxt.Text.Trim() + "'";
+                    database.更新(sqlStr1);
+                    宿舍获取();
+                    MessageBox.Show("修改成功！", "提示");
+                }
+                catch
+                {
+                    MessageBox.Show("操作失败！请检查规范", "提示");
+                }
+            }
+        }
+
+        private void 删除Dor_Click(object sender, EventArgs e)//宿舍信息界面删除宿舍
+        {
+            if (didtxt.Text.Trim().Equals(""))
+            {
+                MessageBox.Show("请输入宿舍id！", "提示");
+            }
+            else if (!IsNotExist_did(didtxt.Text.ToString().Trim()))
+            {
+                string sqlStr1;
+                if (MessageBox.Show("确定要删除该记录吗？无法撤销！", "删除", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        sqlStr1 = "delete from Dormitory where did='" + didtxt.Text.Trim() + "'";
+                        database.更新(sqlStr1);
+                        宿舍获取();
+                        MessageBox.Show("删除成功！", "提示");
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("操作失败！请检查规范", "提示");
+                    }
+                }
+                else return;
+
+            }
+            else
+            {
+                MessageBox.Show("该记录不存在！", "提示");
+                return;
+
+            }
+        }
+
+        private void 取消Dor_Click(object sender, EventArgs e)
+        {
+            bidtxt.Text = "";
+            didtxt.Text = "";
+            dnumtxt.Text = "";
+            floortxt.Text = "";
+            bedtxt.Text = "";
+            pricetxt.Text = "";
+            查询txt.Text = "";
+        }
